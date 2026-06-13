@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Akeel // Web Dev & Cyber Security</title>
+<style>
+  :root{
+    --bg:#0c1116;
+    --panel:#11181f;
+    --line:#26313b;
+    --text:#d6e2ea;
+    --muted:#7c8fa0;
+    --cyan:#5fd0d9;
+    --amber:#e6a23c;
+    --mono:'JetBrains Mono','Courier New',monospace;
+    --sans:'Inter',-apple-system,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--sans);
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important; transition:none !important;}
+  }
+
+  /* background grid */
+  .grid-overlay{
+    position:fixed; inset:0; pointer-events:none; z-index:0;
+    background-image:
+      linear-gradient(rgba(95,208,217,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(95,208,217,0.04) 1px, transparent 1px);
+    background-size:40px 40px;
+    mask-image:radial-gradient(circle at 50% 0%, rgba(0,0,0,0.6), transparent 70%);
+  }
+
+  nav{
+    position:sticky; top:0; z-index:10;
+    display:flex; justify-content:space-between; align-items:center;
+    flex-wrap:wrap; gap:14px;
+    padding:18px 6%;
+    background:rgba(12,17,22,0.85);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .logo{font-family:var(--mono); font-size:1.05rem; letter-spacing:0.5px;}
+  .logo span{color:var(--cyan);}
+  .logo .dot{color:var(--amber);}
+  nav ul{display:flex; gap:28px; list-style:none; margin-left:24px;}
+  nav a{color:var(--muted); text-decoration:none; font-size:0.92rem; transition:color 0.2s;}
+  nav a:hover, nav a:focus-visible{color:var(--text);}
+
+  section{padding:90px 6%; position:relative; z-index:1;}
+  .section-inner{max-width:1000px; margin:0 auto;}
+
+  /* HERO */
+  .hero{
+    min-height:88vh; display:flex; flex-direction:column; justify-content:center;
+    padding-top:60px;
+  }
+  .eyebrow{
+    font-family:var(--mono); color:var(--amber); font-size:0.85rem;
+    letter-spacing:2px; text-transform:uppercase; margin-bottom:18px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .eyebrow::before{
+    content:''; width:8px; height:8px; border-radius:50%;
+    background:var(--amber); display:inline-block;
+    animation:blink 1.6s infinite;
+  }
+  @keyframes blink{50%{opacity:0.25;}}
+
+  .hero h1{
+    font-family:var(--mono);
+    font-size:clamp(2.4rem, 6vw, 4.6rem);
+    font-weight:600; line-height:1.15; letter-spacing:-1px;
+    max-width:900px;
+  }
+  .hero h1 .accent-cyan{color:var(--cyan);}
+  .hero h1 .accent-amber{color:var(--amber);}
+
+  .terminal{
+    margin-top:36px; max-width:620px;
+    background:var(--panel); border:1px solid var(--line); border-radius:8px;
+    font-family:var(--mono); font-size:0.92rem; overflow:hidden;
+    box-shadow:0 20px 60px -30px rgba(95,208,217,0.25);
+  }
+  .terminal-bar{
+    display:flex; gap:8px; padding:10px 14px; border-bottom:1px solid var(--line);
+    background:rgba(255,255,255,0.02);
+  }
+  .terminal-bar span{width:11px; height:11px; border-radius:50%; background:#3a4754;}
+  .terminal-body{padding:18px 20px; color:var(--muted);}
+  .terminal-body .prompt{color:var(--cyan);}
+  .terminal-body .ok{color:#7ed99a;}
+  .terminal-body p{margin-bottom:6px;}
+  .cursor{display:inline-block; width:8px; height:1.1em; background:var(--cyan); vertical-align:text-bottom; animation:blink 1s infinite;}
+
+  .hero-sub{margin-top:28px; color:var(--muted); max-width:540px; font-size:1.02rem;}
+
+  /* SECTION HEADERS */
+  .sec-head{margin-bottom:48px; padding-bottom:24px; border-bottom:1px solid var(--line);}
+  .sec-tag{font-family:var(--mono); color:var(--amber); font-size:0.82rem; letter-spacing:2px; text-transform:uppercase;}
+  .sec-head h2{font-family:var(--mono); font-size:clamp(1.8rem,4vw,2.6rem); margin-top:8px; letter-spacing:-0.5px;}
+
+  /* ABOUT */
+  #about{border-top:1px solid var(--line);}
+  .about-grid{display:grid; grid-template-columns:1.3fr 1fr; gap:60px; align-items:start;}
+  @media (max-width:760px){.about-grid{grid-template-columns:1fr; gap:36px;}}
+  .about-text p{color:var(--muted); margin-bottom:16px; font-size:1.02rem;}
+  .about-text strong{color:var(--text);}
+
+  .id-card{
+    background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:24px;
+    font-family:var(--mono); font-size:0.9rem;
+  }
+  .id-card .row{display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid var(--line);}
+  .id-card .row:last-child{border-bottom:none;}
+  .id-card .row span:first-child{color:var(--muted);}
+  .id-card .row span:last-child{color:var(--text); text-align:right;}
+
+  /* SKILLS */
+  #skills{border-top:1px solid var(--line);}
+  .skill-cols{display:grid; grid-template-columns:1fr 1fr; gap:24px;}
+  @media (max-width:760px){.skill-cols{grid-template-columns:1fr;}}
+  .skill-card{
+    background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:28px;
+    transition:border-color 0.25s, transform 0.25s;
+  }
+  .skill-card:hover{transform:translateY(-3px);}
+  .skill-card.dev:hover{border-color:var(--cyan);}
+  .skill-card.sec:hover{border-color:var(--amber);}
+  .skill-card h3{font-family:var(--mono); font-size:1.15rem; margin-bottom:6px; display:flex; align-items:center; gap:10px;}
+  .skill-card.dev h3{color:var(--cyan);}
+  .skill-card.sec h3{color:var(--amber);}
+  .skill-card p.desc{color:var(--muted); font-size:0.9rem; margin-bottom:18px;}
+  .tag-row{display:flex; flex-wrap:wrap; gap:8px;}
+  .tag{
+    font-family:var(--mono); font-size:0.78rem; padding:5px 10px; border-radius:5px;
+    border:1px solid var(--line); color:var(--text); background:rgba(255,255,255,0.02);
+  }
+
+  /* PROJECTS */
+  #projects{border-top:1px solid var(--line);}
+  .proj-list{display:flex; flex-direction:column; gap:1px; border:1px solid var(--line); border-radius:10px; overflow:hidden;}
+  .proj{
+    display:grid; grid-template-columns:60px 1fr auto; gap:20px; align-items:center;
+    padding:24px; background:var(--panel); border-bottom:1px solid var(--line);
+    transition:background 0.2s;
+  }
+  .proj:last-child{border-bottom:none;}
+  .proj:hover{background:#141d25;}
+  @media (max-width:640px){.proj{grid-template-columns:1fr; gap:10px;}}
+  .proj-num{font-family:var(--mono); color:var(--muted); font-size:0.85rem;}
+  .proj-main h3{font-size:1.08rem; margin-bottom:6px;}
+  .proj-main p{color:var(--muted); font-size:0.92rem;}
+  .proj-status{font-family:var(--mono); font-size:0.78rem; color:var(--cyan); border:1px solid var(--cyan); padding:4px 10px; border-radius:5px; white-space:nowrap;}
+
+  /* CONTACT */
+  #contact{border-top:1px solid var(--line); text-align:center;}
+  #contact .sec-head{text-align:center;}
+  #contact p{color:var(--muted); max-width:480px; margin:0 auto 32px;}
+  .contact-links{display:flex; justify-content:center; gap:16px; flex-wrap:wrap; margin-top:8px;}
+  @media (max-width:480px){
+    .contact-links{flex-direction:column; align-items:stretch;}
+    .contact-links .btn{text-align:center;}
+  }
+  .btn{
+    font-family:var(--mono); font-size:0.92rem; padding:13px 26px; border-radius:6px;
+    text-decoration:none; transition:all 0.2s; border:1px solid var(--line); color:var(--text);
+  }
+  .btn.primary{background:var(--cyan); color:#0c1116; border-color:var(--cyan); font-weight:600;}
+  .btn.primary:hover{background:#7fe0e7;}
+  .btn:not(.primary):hover{border-color:var(--text);}
+
+  footer{
+    text-align:center; padding:30px; color:var(--muted); font-family:var(--mono);
+    font-size:0.8rem; border-top:1px solid var(--line);
+  }
+</style>
+</head>
+<body>
+<div class="grid-overlay"></div>
+
+<nav>
+  <div class="logo">akeel<span>.</span><span class="dot">dev</span></div>
+  <ul>
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <div class="section-inner">
+    <div class="eyebrow">Status: Open to opportunities</div>
+    <h1>Building on the <span class="accent-cyan">web</span>,<br>defending it with <span class="accent-amber">security</span>.</h1>
+    <p class="hero-sub">CSE student specializing in Cyber Security, with hands-on experience in full-stack web development, ethical hacking practice, and creative digital content.</p>
+
+    <div class="terminal">
+      <div class="terminal-bar"><span></span><span></span><span></span></div>
+      <div class="terminal-body">
+        <p><span class="prompt">akeel@dev</span>:~$ whoami</p>
+        <p>CSE student — Cyber Security specialization</p>
+        <p><span class="prompt">akeel@dev</span>:~$ skills --list</p>
+        <p>React · Node.js · Python · Ethical Hacking</p>
+        <p><span class="prompt">akeel@dev</span>:~$ status</p>
+        <p class="ok">[ OK ] ready to build & secure<span class="cursor"></span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="section-inner">
+    <div class="sec-head">
+      <div class="sec-tag">// 01 About</div>
+      <h2>Two sides, one skillset</h2>
+    </div>
+    <div class="about-grid">
+      <div class="about-text">
+        <p>I'm a Computer Science Engineering student specializing in <strong>Cyber Security</strong>, currently building a foundation that bridges two worlds that are often treated separately: making things on the web, and making sure they're safe.</p>
+        <p>On the development side, I work with <strong>React, Node.js, and Python</strong> to build functional, deployed projects — including real client work like deploying an NGO website end-to-end on GitHub Pages.</p>
+        <p>On the security side, I'm building practical skills through <strong>ethical hacking practice</strong> on platforms like TryHackMe and PicoCTF, working with tools like Nmap and Burp Suite to understand how systems break — so I can help build ones that don't.</p>
+      </div>
+      <div class="id-card">
+        <div class="row"><span>Role</span><span>CSE Student</span></div>
+        <div class="row"><span>Specialization</span><span>Cyber Security</span></div>
+        <div class="row"><span>Stack</span><span>React / Node / Python</span></div>
+        <div class="row"><span>Security tools</span><span>Nmap, Burp Suite</span></div>
+        <div class="row"><span>Practice grounds</span><span>TryHackMe, PicoCTF</span></div>
+        <div class="row"><span>Based in</span><span>Tamil Nadu, India</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="section-inner">
+    <div class="sec-head">
+      <div class="sec-tag">// 02 Skills</div>
+      <h2>What I work with</h2>
+    </div>
+    <div class="skill-cols">
+      <div class="skill-card dev">
+        <h3>Web Development</h3>
+        <p class="desc">Building and deploying functional, modern web applications.</p>
+        <div class="tag-row">
+          <span class="tag">React</span>
+          <span class="tag">Node.js</span>
+          <span class="tag">Python</span>
+          <span class="tag">HTML/CSS</span>
+          <span class="tag">GitHub Pages</span>
+          <span class="tag">REST APIs</span>
+        </div>
+      </div>
+      <div class="skill-card sec">
+        <h3>Cyber Security</h3>
+        <p class="desc">Practical, hands-on security fundamentals and tooling.</p>
+        <div class="tag-row">
+          <span class="tag">Ethical Hacking</span>
+          <span class="tag">Nmap</span>
+          <span class="tag">Burp Suite</span>
+          <span class="tag">Linux / Kali</span>
+          <span class="tag">CTF Practice</span>
+          <span class="tag">Network Basics</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="section-inner">
+    <div class="sec-head">
+      <div class="sec-tag">// 03 Projects</div>
+      <h2>Recent work</h2>
+    </div>
+    <div class="proj-list">
+      <div class="proj">
+        <div class="proj-num">01</div>
+        <div class="proj-main">
+          <h3>InAmigos Foundation Website</h3>
+          <p>Deployed an NGO website end-to-end on GitHub Pages, handling the full mobile deployment workflow.</p>
+        </div>
+        <div class="proj-status">Deployed</div>
+      </div>
+      <div class="proj">
+        <div class="proj-num">02</div>
+        <div class="proj-main">
+          <h3>CTF & Security Practice</h3>
+          <p>Ongoing hands-on practice across PicoCTF, TryHackMe, and HackTheBox using a Linux toolchain.</p>
+        </div>
+        <div class="proj-status">In progress</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="section-inner">
+    <div class="sec-head">
+      <div class="sec-tag">// 04 Contact</div>
+      <h2>Let's connect</h2>
+    </div>
+    <p>Open to internships, collaborations, and conversations about web development or cyber security.</p>
+    <div class="contact-links">
+      <a href="mailto:mohamedakeelz110@gmail.com" class="btn primary">Email Me</a>
+      <a href="https://www.linkedin.com/in/mohamed-akeel-97b9a8328" class="btn" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/mohamedakeelz110-crypto" class="btn" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
+</section>
+
+<footer>akeel.dev — built with curiosity, secured with intent.</footer>
+
+</body>
+</html>
